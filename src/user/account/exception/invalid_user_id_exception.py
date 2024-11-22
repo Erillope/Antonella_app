@@ -5,5 +5,5 @@ class InvalidUserIDException(UserException):
         super().__init__(msg)
     
     @staticmethod
-    def invalid_user_id() -> "InvalidUserIDException":
-        return InvalidUserIDException("ID Inválido")
+    def invalid_user_id(id: str) -> "InvalidUserIDException":
+        return InvalidUserIDException(f"El id {id} es inválido")

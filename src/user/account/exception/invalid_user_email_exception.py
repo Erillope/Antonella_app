@@ -5,5 +5,5 @@ class InvalidUserEmailException(InvalidAccountException):
         super().__init__(msg)
         
     @staticmethod
-    def invalid_user_email() -> "InvalidUserEmailException":
-        return InvalidUserEmailException("Email Inválido")
+    def invalid_user_email(email: str) -> "InvalidUserEmailException":
+        return InvalidUserEmailException(f"El email '{email}' es inválido")

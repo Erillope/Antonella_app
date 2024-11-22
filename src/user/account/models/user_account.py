@@ -1,4 +1,3 @@
-from ....common import raises
 from ..exception import *
 from .user_id import UserID
 from .user_email import UserEmail
@@ -9,7 +8,6 @@ from .user_phone_number import UserPhoneNumber
 from abc import ABC
 
 class UserAccount(ABC):
-    @raises(UserException)
     def __init__(self, id: str, account: str, name: str, password: str, state: AccountState) -> None:
         self.__id = UserID(id)
         self.change_account(account)
@@ -17,21 +15,18 @@ class UserAccount(ABC):
         self.change_password(password)
         self.__state = state
     
-    @raises(InvalidAccountException)
     def change_account(self, account: str) -> None:
         if account == None: return
         if UserEmail.is_email(account): self.__account = UserEmail(account)
         elif UserPhoneNumber.is_phone_number(account): self.__account = UserPhoneNumber(account)
-        else: raise InvalidAccountException.invalid_account()
+        else: raise InvalidAccountException.invalid_account(account)
     
-    @raises(InvalidUserNameException)
     def change_name(self, name: str) -> None:
-        if name == None: raise InvalidUserNameException.invalid_name()
+        if name == None: raise InvalidUserNameException.invalid_name(name)
         self.__name = UserName(name)
     
-    @raises(InvalidUserPasswordException)
     def change_password(self, password: str) -> None:
-        if password == None: raise InvalidUserPasswordException.invalid_password()
+        if password == None: raise InvalidUserPasswordException.invalid_password(password)
         self.__password = UserPassword(password)
     
     def enable(self) -> None:
@@ -42,6 +37,9 @@ class UserAccount(ABC):
     
     def is_enable(self) -> bool:
         return self.__state == AccountState.ENABLE
+    
+    def verify_password(self, password: str) -> bool:
+        return self.__password == UserPassword(password)
 
     def get_id(self) -> str:
         return self.__id.get_value()
@@ -63,7 +61,7 @@ class UserAccount(ABC):
     password={self.get_password()},state={self.get_state()})"
     
     def __hash__(self) -> int:
-        return hash(self.id)
+        return hash(self.__id)
     
     def __eq__(self, value: object) -> bool:
         if isinstance(value, UserAccount):
