@@ -5,5 +5,5 @@ class InvalidUserNameException(UserException):
         super().__init__(msg)
     
     @staticmethod
-    def invalid_name() -> "InvalidUserNameException":
-        return InvalidUserNameException("Nombre de usuario Inválido")
+    def invalid_name(name: str) -> "InvalidUserNameException":
+        return InvalidUserNameException(f"El nombre de usuario '{name}' es inválido")

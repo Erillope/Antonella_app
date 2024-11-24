@@ -5,5 +5,5 @@ class InvalidUserPasswordException(UserException):
         super().__init__(msg)
     
     @staticmethod
-    def invalid_password() -> "InvalidUserPasswordException":
-        return InvalidUserPasswordException("Contraseña Inválida")
+    def invalid_password(password: str) -> "InvalidUserPasswordException":
+        return InvalidUserPasswordException(f"La contraseña {password} es inválida")

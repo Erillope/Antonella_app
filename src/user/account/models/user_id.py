@@ -1,19 +1,16 @@
-from ....common import raises
 from ..exception import InvalidUserIDException
 import uuid
 
 class UserID:
-    @raises(InvalidUserIDException)
     def __init__(self, id: str) -> None:
         self.__validate_id(id)
         self.__value = id
     
-    @raises(InvalidUserIDException)
     def __validate_id(self, id: str) -> None:
         try:
             uuid.UUID(id)
         except:
-            raise InvalidUserIDException.invalid_user_id()
+            raise InvalidUserIDException.invalid_user_id(id)
     
     @staticmethod
     def generate() -> str:
@@ -27,8 +24,8 @@ class UserID:
     
     def __eq__(self, value: object) -> bool:
         if isinstance(value, UserID):
-            return self.value == value.value
+            return self.__value == value.__value
         return False
     
     def __hash__(self) -> int:
-        return hash(self.value)
+        return hash(self.__value)

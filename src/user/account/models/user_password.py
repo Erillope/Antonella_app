@@ -1,18 +1,16 @@
-from ....common import raises, RegrexValidator
+from ....common import RegrexValidator
 from ..exception import InvalidUserPasswordException
 
 class UserPassword:
     __REGREX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$"
     
-    @raises(InvalidUserPasswordException)
     def __init__(self, password: str) -> None:
         self.__validate(password)
         self.__value = password
     
-    @raises(InvalidUserPasswordException)
     def __validate(self, password: str) -> None:
         if not RegrexValidator.match(self.__REGREX, password):
-            return InvalidUserPasswordException.invalid_password()
+            return InvalidUserPasswordException.invalid_password(password)
     
     def get_value(self) -> str:
         return self.__value
@@ -22,8 +20,8 @@ class UserPassword:
     
     def __eq__(self, value: object) -> bool:
         if isinstance(value, UserPassword):
-            return self.value == value
+            return self.__value == value.__value
         return False
     
     def __hash__(self) -> int:
-        return hash(self.value)
+        return hash(self.__value)
