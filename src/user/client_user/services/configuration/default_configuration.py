@@ -1,3 +1,4 @@
+from src.common import override
 from ...data_providers import ClientUserRepositoryConfiguration
 from ..auth import ISingIn, ISignUp
 from ..account_data import IChangeAccountData, IEnableClientUserAccount, IDisableClientUserAccount
@@ -7,7 +8,6 @@ from ..account_data.change_account_data import ChangeAccountData
 from ..account_data.enable_client_user_account import EnableClientUserAccount
 from ..account_data.disable_client_user_account import DisableClientUserAccount
 from .service_configuration import ClientUserServiceConfiguration
-from typing import override
 from singleton_decorator import singleton
 
 @singleton

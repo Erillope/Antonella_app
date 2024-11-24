@@ -1,9 +1,9 @@
+from src.common import override
 from ...data_providers import ClientUserRepository
 from ...domain import ClientUser
 from ..dto import ChangeDataDto, ClientUserDto
 from ..user_is_registered import UserIsRegistered
 from .IChange_account_data import IChangeAccountData
-from typing import override
 from singleton_decorator import singleton
 
 @singleton

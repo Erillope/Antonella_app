@@ -1,7 +1,6 @@
-from ....common import RegrexValidator
+from ....common import RegrexValidator, override
 from ..exception import InvalidUserEmailException
 from .account import Account
-from typing import override
 
 class UserEmail(Account):
     __REGREX = "^[a-zA-Z0-9._%+-]+@gmail\\.com$"

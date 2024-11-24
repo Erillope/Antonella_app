@@ -1,7 +1,6 @@
-from ....common import RegrexValidator
+from ....common import RegrexValidator, override
 from ..exception import InvalidPhoneNumberException
 from .account import Account
-from typing import override
 
 class UserPhoneNumber(Account):
     __REGREX = "^(0)?9\\d{8}$"

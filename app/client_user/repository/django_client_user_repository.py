@@ -1,8 +1,9 @@
 from src.user.client_user.data_providers import ClientUserRepository, ClientUserNotFoundException
 from src.user.client_user.domain import ClientUser
+from src.common import override
 from .client_user_table_data import ClientUserTableData
 from .client_user_table_adapter import ClientUserTableAdapter
-from typing import List, override
+from typing import List
 from singleton_decorator import singleton
 
 @singleton

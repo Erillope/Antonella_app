@@ -1,3 +1,4 @@
+from src.common import override
 from ...data_providers import ClientUserRepository
 from ...domain import ClientUser
 from ..dto import SignInDto, ClientUserDto, EnableDto
@@ -5,7 +6,6 @@ from ..user_is_registered import UserIsRegistered
 from ..account_data import IEnableClientUserAccount
 from ..exception import IncorrectPasswordException
 from .ISign_in import ISingIn
-from typing import override
 from singleton_decorator import singleton
 
 @singleton

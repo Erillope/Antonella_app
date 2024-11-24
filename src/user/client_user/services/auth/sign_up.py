@@ -1,9 +1,9 @@
+from src.common import override
 from ...domain import ClientUserFactory, ClientUser
 from ...data_providers import ClientUserRepository
 from ..user_is_registered import UserIsRegistered
 from ..dto import SignUpDto, ClientUserDto
 from .ISign_up import ISignUp
-from typing import override
 from singleton_decorator import singleton
 
 @singleton
