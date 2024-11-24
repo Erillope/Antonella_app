@@ -4,13 +4,15 @@ from ..dto import ChangeDataDto, ClientUserDto
 from ..user_is_registered import UserIsRegistered
 from .IChange_account_data import IChangeAccountData
 from typing import override
+from singleton_decorator import singleton
 
+@singleton
 class ChangeAccountData(IChangeAccountData):
     def __init__(self, user_repository: ClientUserRepository) -> None:
         self.__user_repository = user_repository
         
     @override
-    def changeData(self, dto: ChangeDataDto) -> ClientUserDto:
+    def change_data(self, dto: ChangeDataDto) -> ClientUserDto:
         user = UserIsRegistered.is_registered_by_id(self.__user_repository, dto.get_id())
         user = self.__change(user, dto)
         return ClientUserDto.generate_dto(user)

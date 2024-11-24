@@ -6,14 +6,14 @@ class UserBirthdate:
     
     def __init__(self, birthdate: date) -> None:
         self.__validate(birthdate)
-        self.__value = date
+        self.__value = birthdate
     
     def __validate(self, birthdate: date) -> None:
         self.__validate_future_date(birthdate)
         self.__validate_age(birthdate)
         
     def __validate_future_date(self, birthdate: date) -> None:
-        if birthdate < date.today():
+        if birthdate > date.today():
             raise InvalidUserBirthdateException.invalid_birthdate(birthdate)
     
     def __validate_age(self, birthdate: date) -> None:

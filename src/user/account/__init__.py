@@ -1,2 +1,2 @@
 from .exception import UserException
-from .models import AccountState, UserAccount, UserID
+from .models import AccountStatus, UserAccount, UserID

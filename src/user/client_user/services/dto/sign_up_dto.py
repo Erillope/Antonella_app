@@ -20,5 +20,5 @@ class SignUpDto:
         return self.__birthdate
     
     def __str__(self) -> str:
-        return f"SignUpDto(account={self.get_account()},name={self.get_name()},password={self.get_password()},
-    birthdate={self.get_birthdate()})"
+        return f"SignUpDto(account={self.get_account()},name={self.get_name()},password={self.get_password()},"\
+    f"birthdate={self.get_birthdate()})"

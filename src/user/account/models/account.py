@@ -1,9 +1,8 @@
-from ..exception import InvalidAccountException
 from abc import ABC, abstractmethod
 
 class Account(ABC):
     def __init__(self, account: str) -> None:
-        self.__validate(account)
+        self._validate(account)
         self.__value = account
     
     @abstractmethod

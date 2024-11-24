@@ -4,7 +4,9 @@ from ..dto import EnableDto, ClientUserDto
 from ..user_is_registered import UserIsRegistered
 from .IEnable_client_user_account import IEnableClientUserAccount
 from typing import override
+from singleton_decorator import singleton
 
+@singleton
 class EnableClientUserAccount(IEnableClientUserAccount):
     def __init__(self, user_repository: ClientUserRepository) -> None:
         self.__user_repository = user_repository
@@ -18,5 +20,5 @@ class EnableClientUserAccount(IEnableClientUserAccount):
     def __enable_account(self, user: ClientUser) -> ClientUser:
         if not user.is_enable():
             user.enable()
-            return self.__userRepository.save(user)
+            return self.__user_repository.save(user)
         return user

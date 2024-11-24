@@ -4,7 +4,9 @@ from ..user_is_registered import UserIsRegistered
 from ..dto import SignUpDto, ClientUserDto
 from .ISign_up import ISignUp
 from typing import override
+from singleton_decorator import singleton
 
+@singleton
 class SignUp(ISignUp):
     def __init__(self, user_repository: ClientUserRepository) -> None:
         self.__user_repository = user_repository
@@ -17,4 +19,4 @@ class SignUp(ISignUp):
     
     def __register(self, dto: SignUpDto) -> ClientUser:
         user = ClientUserFactory.create_default(dto.get_account(), dto.get_name(), dto.get_password(), dto.get_birthdate())
-        return self.__userRepository.save(user)
+        return self.__user_repository.save(user)

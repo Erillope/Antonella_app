@@ -19,5 +19,5 @@ class ChangeDataDto:
         return self.__password
     
     def __str__(self) -> str:
-        return f"ChangeDataDto(id={self.get_id()},account={self.get_account()},name={self.get_name()},
-    password={self.get_password()})"
+        return f"ChangeDataDto(id={self.get_id()},account={self.get_account()},name={self.get_name()},"\
+    f"password={self.get_password()})"
