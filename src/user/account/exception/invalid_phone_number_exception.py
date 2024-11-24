@@ -5,5 +5,5 @@ class InvalidPhoneNumberException(InvalidAccountException):
         super().__init__(msg)
         
     @staticmethod
-    def invalid_phone_number() -> "InvalidPhoneNumberException":
-        return InvalidPhoneNumberException("Número de celular inválido")
+    def invalid_phone_number(phone_number: str) -> "InvalidPhoneNumberException":
+        return InvalidPhoneNumberException(f"El número de celular '{phone_number}' es inválido")
