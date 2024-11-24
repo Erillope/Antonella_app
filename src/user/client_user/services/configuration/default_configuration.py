@@ -1,4 +1,3 @@
-from src.common import override
 from ...data_providers import ClientUserRepositoryConfiguration
 from ..auth import ISingIn, ISignUp
 from ..account_data import IChangeAccountData, IEnableClientUserAccount, IDisableClientUserAccount
@@ -16,22 +15,17 @@ class DefaultClientUserServiceConfiguration(ClientUserServiceConfiguration):
         super().__init__()
         self.__user_respository = repository_config.construct_user_repository()
     
-    @override
     def construct_sign_up_service(self) -> ISignUp:
         return SignUp(self.__user_respository)
     
-    @override
     def construct_sign_in_service(self) -> ISingIn:
         return SignIn(self.__user_respository, self.construct_enable_account_service())
     
-    @override
     def construct_enable_account_service(self) -> IEnableClientUserAccount:
         return EnableClientUserAccount(self.__user_respository)
     
-    @override
     def construct_disable_account_service(self) -> IDisableClientUserAccount:
         return DisableClientUserAccount(self.__user_respository)
     
-    @override
     def construct_change_data_service(self) -> IChangeAccountData:
         return ChangeAccountData(self.__user_respository)

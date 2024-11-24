@@ -1,4 +1,3 @@
-from src.common import override
 from ...data_providers import ClientUserRepository
 from ...domain import ClientUser
 from ..dto import SignInDto, ClientUserDto, EnableDto
@@ -14,7 +13,6 @@ class SignIn(ISingIn):
         self.__user_repository = user_repository
         self.__enable_account_service = enable_account_service
         
-    @override
     def sign_in(self, dto: SignInDto) -> ClientUserDto:
         user = UserIsRegistered.is_registered_by_account(self.__user_repository ,dto.get_account())
         self.__verify_password(user, dto.get_password())

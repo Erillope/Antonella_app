@@ -1,4 +1,3 @@
-from src.common import override
 from ...data_providers import ClientUserRepository
 from ...domain import ClientUser
 from ..dto import EnableDto, ClientUserDto
@@ -11,7 +10,6 @@ class EnableClientUserAccount(IEnableClientUserAccount):
     def __init__(self, user_repository: ClientUserRepository) -> None:
         self.__user_repository = user_repository
         
-    @override
     def enable(self, dto: EnableDto) -> ClientUserDto:
         user = UserIsRegistered.is_registered_by_id(self.__user_repository, dto.get_id())
         user = self.__enable_account(user)

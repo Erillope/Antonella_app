@@ -1,11 +1,10 @@
-from ....common import RegrexValidator, override
+from ....common import RegrexValidator
 from ..exception import InvalidUserEmailException
 from .account import Account
 
 class UserEmail(Account):
     __REGREX = "^[a-zA-Z0-9._%+-]+@gmail\\.com$"
     
-    @override
     def _validate(self, email: str) -> None:
         if not UserEmail.is_email(email):
             raise InvalidUserEmailException.invalid_user_email(email)
