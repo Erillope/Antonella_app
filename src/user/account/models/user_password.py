@@ -12,6 +12,10 @@ class UserPassword:
         if not RegrexValidator.match(self.__REGREX, password):
             return InvalidUserPasswordException.invalid_password(password)
     
+    @staticmethod
+    def generate() -> str:
+        return UserPassword("Password_123").get_value()
+    
     def get_value(self) -> str:
         return self.__value
     

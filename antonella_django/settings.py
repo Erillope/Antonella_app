@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app.client_user',
+    'app.employee_user',
     'rest_framework'
 ]
 
@@ -81,7 +82,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'resources' / 'db' / 'antonella_db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
