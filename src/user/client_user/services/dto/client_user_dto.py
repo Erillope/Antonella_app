@@ -4,9 +4,9 @@ from datetime import date
 
 class ClientUserDto:
     def __init__(self, id: str, account: str, name: str, birthdate: date, status: AccountStatus, joined_date: date) -> None:
-        self.__id = id
-        self.__account = account
-        self.__name = name
+        self.__id = id.strip()
+        self.__account = account.strip()
+        self.__name = name.strip()
         self.__birthdate = birthdate
         self.__status = status
         self.__joined_date = joined_date

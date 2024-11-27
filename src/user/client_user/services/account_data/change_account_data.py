@@ -11,7 +11,7 @@ class ChangeAccountData(IChangeAccountData):
         self.__user_repository = user_repository
         
     def change_data(self, dto: ChangeDataDto) -> ClientUserDto:
-        user = UserIsRegistered.is_registered_by_id(self.__user_repository, dto.get_id())
+        user = self.__verify(dto)
         user = self.__change(user, dto)
         return ClientUserDto.generate_dto(user)
         
@@ -20,3 +20,9 @@ class ChangeAccountData(IChangeAccountData):
         user.change_name(dto.get_name())
         user.change_password(dto.get_password())
         return self.__user_repository.save(user)
+    
+    def __verify(self, dto: ChangeDataDto) -> ClientUser:
+        user = UserIsRegistered.is_registered_by_id(self.__user_repository, dto.get_id())
+        if dto.get_account() != None and user.get_account() != dto.get_account():
+            UserIsRegistered.verify_is_already_registered(self.__user_repository, dto.get_account())
+        return user

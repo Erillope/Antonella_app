@@ -15,6 +15,10 @@ class UserPassword:
     def get_value(self) -> str:
         return self.__value
     
+    @staticmethod
+    def generate() -> str:
+        return "Password_123"
+    
     def __str__(self) -> str:
         return self.get_value()
     

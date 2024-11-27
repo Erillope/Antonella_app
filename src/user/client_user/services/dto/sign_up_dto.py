@@ -2,10 +2,10 @@ from datetime import date
 
 class SignUpDto:
     def __init__(self, account: str, name: str, password: str, birthdate: date) -> None:
-        self.__account = account
-        self.__name = name
+        self.__account = account.strip()
+        self.__name = name.strip()
         self.__password = password
-        self.__birthdate = birthdate
+        self.__birthdate = birthdate.strip()
     
     def get_account(self) -> str:
         return self.__account
