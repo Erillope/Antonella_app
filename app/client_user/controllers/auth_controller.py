@@ -1,7 +1,7 @@
 from app.client_user.serializers import SignInSerializer, SignUpSerializer, ClienUserSerializer
 from src.user.account import UserException
 from app.client_user.configuration import DependenciesManager
-from app.create_view import create_post
+from app.create_view import ViewCreator, HttpMethod
 from app.controller import Controller
 from .request_adapter import RequestAdapter
 from rest_framework.request import Request
@@ -24,9 +24,21 @@ class AuthController(Controller):
     
     def generate_views(self) -> List:
         views = [
-            ("signin", create_post(SignInSerializer, UserException,
-                                   lambda request: self.__sign_in_executer(request), "Sign In")),
-            ("signup", create_post(SignUpSerializer, UserException,
-                                   lambda request: self.__sign_up_executer(request), "Sign Up")),
+            ViewCreator(
+                path = "signin",
+                serializer_class = SignInSerializer,
+                exception_class = UserException,
+                executer = lambda request: self.__sign_in_executer(request),
+                name = "Sign In",
+                http_method = HttpMethod.POST
+            ),
+            ViewCreator(
+                path = "signup",
+                serializer_class = SignUpSerializer,
+                exception_class = UserException,
+                executer = lambda request: self.__sign_up_executer(request),
+                name = "Sign Up",
+                http_method = HttpMethod.POST
+            ),
         ]
         return views

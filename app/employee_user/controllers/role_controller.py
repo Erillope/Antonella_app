@@ -1,7 +1,7 @@
 from app.employee_user.serializers import AddRoleSerializer, RemoveRoleSerializer, RoleSerializer
 from src.user.account import UserException
 from app.employee_user.configuration import DependenciesManager
-from app.create_view import create_post, create_delete
+from app.create_view import ViewCreator, HttpMethod
 from app.controller import Controller
 from .request_adapter import RequestAdapter
 from rest_framework.request import Request
@@ -22,11 +22,22 @@ class RoleController(Controller):
         role_dto = remove_role_service.remove(RequestAdapter.to_remove_role_dto(role))
         return RoleSerializer.generate_serializer(role_dto)
     
-    def generate_views(self) -> List:
+    def generate_views(self) -> List[ViewCreator]:
         views = [
-            ("add", create_post(AddRoleSerializer, UserException,
-                                        lambda request: self.__add_role_executer(request), "Add Role")),
-            ("remove/<str:role>", create_delete(UserException,
-                                        lambda role: self.__remove_role_executer(role), "Remove Role")),
+            ViewCreator(
+                path = "add",
+                serializer_class = AddRoleSerializer,
+                exception_class = UserException,
+                executer = lambda request: self.__add_role_executer(request),
+                name = "Add Role",
+                http_method = HttpMethod.POST
+            ),
+            ViewCreator(
+                path = "remove/<str:role>",
+                exception_class = UserException,
+                executer = lambda role: self.__remove_role_executer(role),
+                name = "Remove Role",
+                http_method = HttpMethod.DELETE
+            )
         ]
         return views

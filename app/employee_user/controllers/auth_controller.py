@@ -1,7 +1,7 @@
 from app.employee_user.serializers import SignInSerializer, RegisterEmployeeSerializer, EmployeeUserSerializer
 from src.user.account import UserException
 from app.employee_user.configuration import DependenciesManager
-from app.create_view import create_post
+from app.create_view import ViewCreator, HttpMethod
 from app.controller import Controller
 from .request_adapter import RequestAdapter
 from rest_framework.request import Request
@@ -22,11 +22,23 @@ class AuthController(Controller):
         employee_dto = register_service.register_employee(RequestAdapter.to_register_dto(request))
         return EmployeeUserSerializer.generate_serializer(employee_dto)
     
-    def generate_views(self) -> List:
+    def generate_views(self) -> List[ViewCreator]:
         views = [
-            ("signin", create_post(SignInSerializer, UserException,
-                                   lambda request: self.__sign_in_executer(request), "Sign In")),
-            ("register", create_post(RegisterEmployeeSerializer, UserException,
-                                   lambda request: self.__register_executer(request), "Register")),
+            ViewCreator(
+                path = "signin",
+                serializer_class = SignInSerializer,
+                exception_class = UserException,
+                executer = lambda request: self.__sign_in_executer(request),
+                name = "Sign In",
+                http_method = HttpMethod.POST
+            ),
+            ViewCreator(
+                path = "register",
+                serializer_class = RegisterEmployeeSerializer,
+                exception_class = UserException,
+                executer = lambda request: self.__register_executer(request),
+                name = "Register",
+                http_method = HttpMethod.POST
+            )
         ]
         return views

@@ -2,7 +2,7 @@ from app.employee_user.serializers import (ChangeDataSerializer, EnableSerialize
                                            GiveRoleSerializer, TakeRoleSerializer, EmployeeUserSerializer)
 from src.user.account import UserException
 from app.employee_user.configuration import DependenciesManager
-from app.create_view import create_put
+from app.create_view import ViewCreator, HttpMethod
 from app.controller import Controller
 from .request_adapter import RequestAdapter
 from rest_framework.request import Request
@@ -38,17 +38,47 @@ class AccountDataController(Controller):
         employee_dto = take_role_service.take(RequestAdapter.to_take_role_dto(request))
         return EmployeeUserSerializer.generate_serializer(employee_dto)
     
-    def generate_views(self) -> List:
+    def generate_views(self) -> List[ViewCreator]:
         views = [
-            ("change_data", create_put(ChangeDataSerializer, UserException,
-                                        lambda request: self.__change_data_executer(request), "Change Data")),
-            ("enable", create_put(EnableSerializer, UserException,
-                                   lambda request: self.__enable_executer(request), "Enable")),
-            ("disable", create_put(DisableSerializer, UserException,
-                                    lambda request: self.__disable_executer(request), "Disable")),
-            ("give_role", create_put(GiveRoleSerializer, UserException,
-                                    lambda request: self.__give_role_executer(request), "Give Role")),
-            ("take_role", create_put(TakeRoleSerializer, UserException,
-                                    lambda request: self.__take_role_executer(request), "Tale Role")),
+            ViewCreator(
+                path = "change_data",
+                exception_class = UserException,
+                executer = lambda request: self.__change_data_executer(request),
+                name = "Change Data",
+                serializer_class = ChangeDataSerializer,
+                http_method = HttpMethod.PUT
+            ),
+            ViewCreator(
+                path = "enable",
+                exception_class = UserException,
+                executer = lambda request: self.__enable_executer(request),
+                name = "Enable",
+                serializer_class = EnableSerializer,
+                http_method = HttpMethod.PUT
+            ),
+            ViewCreator(
+                path = "disable",
+                exception_class = UserException,
+                executer = lambda request: self.__disable_executer(request),
+                name = "Disable",
+                serializer_class = DisableSerializer,
+                http_method = HttpMethod.PUT
+            ),
+            ViewCreator(
+                path = "give_role",
+                exception_class = UserException,
+                executer = lambda request: self.__give_role_executer(request),
+                name = "Give Role",
+                serializer_class = GiveRoleSerializer,
+                http_method = HttpMethod.PUT
+            ),
+            ViewCreator(
+                path = "take_role",
+                exception_class = UserException,
+                executer = lambda request: self.__take_role_executer(request),
+                name = "Take Role",
+                serializer_class = TakeRoleSerializer,
+                http_method = HttpMethod.PUT
+            )
         ]
         return views

@@ -12,7 +12,7 @@ class Router:
     def get_routes(self) -> List:
         urls = []
         for controller in self.controllers:
-            for name, view in controller.generate_views():
-                url = path(f"{controller.route_prefix}/{name}", view)
+            for view in controller.generate_views():
+                url = path(f"{controller.route_prefix}/{view.get_path()}", view.create())
                 urls.append(url)
         return urls

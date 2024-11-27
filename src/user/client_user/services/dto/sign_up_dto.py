@@ -5,7 +5,7 @@ class SignUpDto:
         self.__account = account.strip()
         self.__name = name.strip()
         self.__password = password
-        self.__birthdate = birthdate.strip()
+        self.__birthdate = birthdate
     
     def get_account(self) -> str:
         return self.__account

@@ -25,8 +25,10 @@ SECRET_KEY = 'django-insecure-%(twoa#j3wdau4)k%kqv7$(t7($9tk=8qy_90jio6k9i5z*yx6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["erillope.pythonanywhere.com"]
 
+#ALLOWED_HOSTS = ["erillope.pythonanywhere.com"]
+
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -75,7 +77,7 @@ WSGI_APPLICATION = 'antonella_django.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -86,14 +88,14 @@ DATABASES = {
         'PORT': '3306'
     }
 }
-'''
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'resources' / 'db' / 'antonella_db.sqlite3',
     }
 }
-'''
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
