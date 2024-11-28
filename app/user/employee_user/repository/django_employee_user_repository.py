@@ -58,6 +58,7 @@ class DjangoEmployeeUserRepository(UserAccountRepository):
                 UserRoleTableData.objects.create(employee=employee_table, role=role_table)
                 
     def exists_by_account(self, account: str) -> bool:
+        print(UserAccountTableData.objects.filter(account=account).exists(), "----AAA---")
         return UserAccountTableData.objects.filter(account=account).exists()
     
     def exists_by_id(self, id: str) -> bool:

@@ -40,7 +40,7 @@ class DjangoClientUserRepository(UserAccountRepository):
         return saved_user
     
     def exists_by_account(self, account: str) -> bool:
-        return UserAccountTableData.filter(account=account).exists()
+        return UserAccountTableData.objects.filter(account=account).exists()
     
     def exists_by_id(self, id: str) -> bool:
         return UserAccountTableData.objects.filter(id=id).exists()
