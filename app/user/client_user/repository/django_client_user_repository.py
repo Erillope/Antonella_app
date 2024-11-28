@@ -1,4 +1,5 @@
 from src.user.account.data_providers import UserNotFoundException, UserAccountRepository
+from app.user.account.user_account_table_data import UserAccountTableData
 from src.user.client_user.domain import ClientUser
 from .client_user_table_data import ClientUserTableData
 from .client_user_table_mapper import ClientUserTableMapper
@@ -39,7 +40,7 @@ class DjangoClientUserRepository(UserAccountRepository):
         return saved_user
     
     def exists_by_account(self, account: str) -> bool:
-        return ClientUserTableData.objects.filter(account=account).exists()
+        return UserAccountTableData.filter(account=account).exists()
     
     def exists_by_id(self, id: str) -> bool:
-        return ClientUserTableData.objects.filter(id=id).exists()
+        return UserAccountTableData.objects.filter(id=id).exists()

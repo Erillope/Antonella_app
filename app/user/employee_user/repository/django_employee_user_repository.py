@@ -1,4 +1,5 @@
 from src.user.account.data_providers import UserAccountRepository, UserNotFoundException
+from app.user.account.user_account_table_data import UserAccountTableData
 from src.user.employee_user.domain import EmployeeUser, Role
 from .employee_user_table_data import EmployeeUserTableData
 from .user_role_table_data import UserRoleTableData
@@ -57,7 +58,7 @@ class DjangoEmployeeUserRepository(UserAccountRepository):
                 UserRoleTableData.objects.create(employee=employee_table, role=role_table)
                 
     def exists_by_account(self, account: str) -> bool:
-        return EmployeeUserTableData.objects.filter(account=account).exists()
+        return UserAccountTableData.objects.filter(account=account).exists()
     
     def exists_by_id(self, id: str) -> bool:
-        return EmployeeUserTableData.objects.filter(id=id).exists()
+        return UserAccountTableData.objects.filter(id=id).exists()
