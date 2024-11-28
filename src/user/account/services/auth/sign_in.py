@@ -5,7 +5,6 @@ from ..user_is_registered import UserIsRegistered
 from ..account_data import IEnableUserAccount
 from ..exception import IncorrectPasswordException
 from .ISign_in import ISingIn
-from singleton_decorator import singleton
 
 class SignIn(ISingIn):
     def __init__(self, user_repository: UserAccountRepository, enable_account_service: IEnableUserAccount) -> None:
