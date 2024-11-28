@@ -1,6 +1,6 @@
-from ..auth import ISingIn, IRegisterEmployee
-from ..account_data import (IChangeAccountData, IDisableEmployeeUserAccount, IEnableEmployeeUserAccount,
-                            IGiveRole, ITakeRole)
+from src.user.account import ISingIn, IChangeAccountData, IDisableUserAccount, IEnableUserAccount
+from ..auth import IRegisterEmployee
+from ..account_data import IGiveRole, ITakeRole
 from ..role import IAddRole, IRemoveRole
 from abc import ABC, abstractmethod
 
@@ -12,10 +12,10 @@ class EmployeeUserServiceConfiguration(ABC):
     def construct_sign_in_service(self) -> ISingIn: ...
     
     @abstractmethod
-    def construct_enable_account_service(self) -> IEnableEmployeeUserAccount: ...
+    def construct_enable_account_service(self) -> IEnableUserAccount: ...
     
     @abstractmethod
-    def construct_disable_account_service(self) -> IDisableEmployeeUserAccount: ...
+    def construct_disable_account_service(self) -> IDisableUserAccount: ...
     
     @abstractmethod
     def construct_change_data_service(self) -> IChangeAccountData: ...

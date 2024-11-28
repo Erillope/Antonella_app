@@ -1,2 +1,1 @@
-from .employee_user_repository import EmployeeUserRepository
 from .role_repository import RoleRepository

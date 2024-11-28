@@ -1,5 +1,4 @@
-from ..auth import ISingIn, ISignUp
-from ..account_data import IEnableClientUserAccount, IDisableClientUserAccount, IChangeAccountData
+from src.user.account import IEnableUserAccount, IDisableUserAccount, IChangeAccountData, ISingIn, ISignUp
 from abc import ABC, abstractmethod
 
 class ClientUserServiceConfiguration(ABC):
@@ -10,10 +9,10 @@ class ClientUserServiceConfiguration(ABC):
     def construct_sign_in_service(self) -> ISingIn: ...
     
     @abstractmethod
-    def construct_enable_account_service(self) -> IEnableClientUserAccount: ...
+    def construct_enable_account_service(self) -> IEnableUserAccount: ...
     
     @abstractmethod
-    def construct_disable_account_service(self) -> IDisableClientUserAccount: ...
+    def construct_disable_account_service(self) -> IDisableUserAccount: ...
     
     @abstractmethod
     def construct_change_data_service(self) -> IChangeAccountData: ...

@@ -1,1 +1,0 @@
-from .repository_configuration import ClientUserRepositoryConfiguration

@@ -1,5 +1,4 @@
-from src.user.account import UserAccount
-from src.user.account.models.account_status import AccountStatus
+from src.user.account import UserAccount, AccountStatus
 from .role import Role
 from datetime import date
 from typing import Set

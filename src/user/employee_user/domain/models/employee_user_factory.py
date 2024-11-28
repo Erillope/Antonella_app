@@ -1,5 +1,4 @@
-from src.user.account.models.account_status import AccountStatus
-from src.user.account import UserID, UserPassword
+from src.user.account import UserID, UserPassword, AccountStatus
 from .employee_user import EmployeeUser
 from datetime import date
 from typing import Set

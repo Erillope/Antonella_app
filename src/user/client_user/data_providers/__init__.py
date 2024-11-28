@@ -1,3 +1,1 @@
-from .exception import ClientUserRepositoryException, ClientUserNotFoundException
-from .repository import ClientUserRepository
-from .configuration import ClientUserRepositoryConfiguration
+from .repository_configuration import ClientUserRepositoryConfiguration
