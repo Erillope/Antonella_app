@@ -1,10 +1,18 @@
-from src.user.account import ISingIn, IChangeAccountData, IDisableUserAccount, IEnableUserAccount
+from src.user.account import (ISingIn, IChangeAccountData, IDisableUserAccount,
+                              IEnableUserAccount, UserIsRegistered)
 from ..auth import IRegisterEmployee
 from ..account_data import IGiveRole, ITakeRole
+from ..role_is_registered import RoleIsRegistered
 from ..role import IAddRole, IRemoveRole
 from abc import ABC, abstractmethod
 
 class EmployeeUserServiceConfiguration(ABC):
+    @abstractmethod
+    def construct_employee_is_registered_service(self) -> UserIsRegistered: ...
+    
+    @abstractmethod
+    def construct_role_is_registered(self) -> RoleIsRegistered: ...
+    
     @abstractmethod
     def construct_register_service(self) -> IRegisterEmployee: ...
     

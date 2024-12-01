@@ -1,9 +1,17 @@
-from src.user.client_user.data_providers import ClientUserRepositoryConfiguration
-from src.user.account.data_providers import UserAccountRepository
-from ..repository.django_client_user_repository import DjangoClientUserRepository
+from src.user.account.data_providers import UserRepositoryConfiguration
+from src.user.account.data_providers import ExistsUser, GetUser, SaveUser
+from ..repository import DjangoSaveClientUser, DjangoExistsClientUser, DjangoGetClientUser
 from singleton_decorator import singleton
 
 @singleton
-class DjangoClientUserRepositoryConfiguration(ClientUserRepositoryConfiguration):
-    def construct_user_repository(self) -> UserAccountRepository:
-        return DjangoClientUserRepository()
+class DjangoClientUserRepositoryConfiguration(UserRepositoryConfiguration):
+    def construct_exists_user(self) -> ExistsUser:
+        return DjangoExistsClientUser()
+    
+    def construct_get_user(self) -> GetUser:
+        return DjangoGetClientUser(
+            exists_client_user = self.construct_exists_user()
+        )
+    
+    def construct_save_user(self) -> SaveUser:
+        return DjangoSaveClientUser()

@@ -1,3 +1,3 @@
 from .configuration import EmployeeUserRepositoryConfiguration
 from .exception import RoleNotFoundException
-from .repository import RoleRepository
+from .repository import GetRole, DeleteRole, SaveRole

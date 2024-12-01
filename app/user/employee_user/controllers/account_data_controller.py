@@ -82,16 +82,15 @@ class AccountDataController(Controller):
     
     def __take_role_view(self) -> ViewCreator:
         take_role_service = self.services.construct_take_role_service()
-        executer = lambda request: take_role_service.take(
-            self.__request_mapper.to_take_role_dto(request)
+        executer = lambda id, roles: take_role_service.take(
+            self.__request_mapper.to_take_role_dto(id, roles)
         )
         return ViewCreator(
-                path = "take_role",
+                path = "take_role/<str:id>/<str:roles>",
                 exception_class = UserException,
                 executer = executer,
                 name = "Take Role",
-                serializer_class = TakeRoleSerializer,
-                http_method = HttpMethod.PUT,
+                http_method = HttpMethod.DELETE,
                 mapper = self.__serializer_mapper
             )
     

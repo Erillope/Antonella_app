@@ -1,7 +1,12 @@
-from src.user.account import IEnableUserAccount, IDisableUserAccount, IChangeAccountData, ISingIn, ISignUp
+from src.user.account.services import (IEnableUserAccount, IDisableUserAccount,
+                                       IChangeAccountData, ISingIn, ISignUp)
+from .user_is_registered import UserIsRegistered
 from abc import ABC, abstractmethod
 
-class ClientUserServiceConfiguration(ABC):
+class UserServiceConfiguration(ABC):
+    @abstractmethod
+    def construct_user_is_registered_service(self) -> UserIsRegistered: ...
+    
     @abstractmethod
     def construct_sign_up_service(self) -> ISignUp: ...
     

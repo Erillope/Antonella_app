@@ -1,1 +1,1 @@
-from .services import ClientUserServiceConfiguration, DefaultClientUserServiceConfiguration
+from .services import DefaultClientUserServiceConfiguration
