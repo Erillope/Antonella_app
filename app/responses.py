@@ -21,3 +21,10 @@ def invalid_field_response(errors: Dict) -> Response:
     msg = "Asegurese de llenar correctamente los campos requeridos: " + str(list(errors.keys()))
     e = Exception(msg)
     return failure_response(e)
+
+def internal_server_error_response() -> Response:
+    return Response({
+        "status": "failure",
+        "code": 500,
+        "message": "Internal Server Error"
+    }, status = status.HTTP_500_INTERNAL_SERVER_ERROR)

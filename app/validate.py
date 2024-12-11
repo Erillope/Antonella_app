@@ -1,28 +1,23 @@
-from .responses import invalid_field_response, failure_response
+from src.common import SystemException
+from .responses import invalid_field_response, failure_response, internal_server_error_response
 from functools import wraps
 from rest_framework.serializers import Serializer
 from typing import Type
 
-def validate_request(serializer_class: Type[Serializer], exception_class: Type[Exception]):
+def validate(serializer_class: Type[Serializer] = None):
     def decorator(func):
         @wraps(func)
         def wrapper(self, request, *args, **kwargs):
-            serializer = serializer_class(data=request.data)
-            if not serializer.is_valid(): return invalid_field_response(serializer.errors)
+            if serializer_class is not None:
+                serializer = serializer_class(data=request.data)
+                if not serializer.is_valid(): return invalid_field_response(serializer.errors)
             try:
-                return func(self, request, *args, **kwargs)
-            except exception_class as e:
-                return failure_response(e)
-        return wrapper
-    return decorator
-
-def validate(exception_class: Type[Exception]):
-    def decorator(func):
-        @wraps(func)
-        def wrapper(self, *args, **kwargs):
-            try:
+                if serializer_class is not None:
+                    return func(self, request, **kwargs)
                 return func(self, **kwargs)
-            except exception_class as e:
+            except SystemException as e:
                 return failure_response(e)
+            #except:
+             #   return internal_server_error_response()
         return wrapper
     return decorator
