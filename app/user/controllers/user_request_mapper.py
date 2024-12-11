@@ -1,4 +1,5 @@
 from rest_framework.request import Request
+from src.common.exception import InvalidOrderDirectionException
 from src.common import OrdenDirection
 from src.user.services.dto import (SignInDto, SignUpDto, ChangeDataDto, EnableDto, DisableDto, AddRoleDto,
                                    DeleteRoleDto, RenameRoleDto, GiveRoleDto, RemoveRoleDto, FilterUserDto)
@@ -52,6 +53,8 @@ class UserRequestMapper:
 
     def to_filter_user_dto(self, expresion: str, order_by: int,
                            offset: int, limit: int, direction: str) -> FilterUserDto:
+        if not OrdenDirection.contain_name(direction):
+            raise InvalidOrderDirectionException.invalid_direction(direction)
         return FilterUserDto(
             expresion = expresion,
             order_by = order_by,
