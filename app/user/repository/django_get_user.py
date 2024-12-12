@@ -2,7 +2,7 @@ from src.common import OrdenDirection
 from app.filter import DjangoFilter
 from src.user import GetUser, UserAccount, ExistsUser, UserNotFoundException
 from .tables import UserAccountTableData, UserTableMapper, UserRoleTableData
-from typing import List
+from typing import List, Optional
 
 class DjangoGetUser(GetUser):
     def __init__(self, exists_user: ExistsUser) -> None:
@@ -23,7 +23,7 @@ class DjangoGetUser(GetUser):
             return self.__mapper.to_user(user_table, roles)
         raise UserNotFoundException.not_found(id)
     
-    def filter(self, expresion: str, limit: int, offset: int,
+    def filter(self, expresion: Optional[str], limit: int, offset: int,
                  order_by: str, direction: OrdenDirection) -> List[UserAccount]:
         _filter = DjangoUserFilter.construct_filter(UserAccountTableData, expresion,
                                                 limit, offset, order_by, direction)

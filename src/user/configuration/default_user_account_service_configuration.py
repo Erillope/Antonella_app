@@ -24,7 +24,8 @@ class DefaultUserAccountServiceConfiguration(UserAccountServiceConfiguration):
         return SignUp(
             save_user = self.__user_repository_configuration.construct_save_user(),
             user_is_registered = self.construct_user_is_registered_service(),
-            give_role_service = self.construct_give_role_service()
+            give_role_service = self.construct_give_role_service(),
+            role_is_registered = self.__role_service_configuration.construct_role_is_registered_service()
         )
     
     def construct_sign_in_service(self) -> ISignIn:

@@ -1,3 +1,4 @@
+from src.common import ID
 from src.common import PatternMatcher, StringValue
 from ..exception import InvalidRoleException
 from datetime import date
@@ -6,7 +7,8 @@ class Role:
     __REGREX = "^[a-zA-Z0-9_]{3,20}$"
     __MATCHER = PatternMatcher(__REGREX)
     
-    def __init__(self, role: str, created_date: date) -> None:
+    def __init__(self, id: str, role: str, created_date: date) -> None:
+        self.__id = ID(id)
         self.__value = StringValue(role)
         self.__created_date = created_date
         self.__validate_role()
@@ -25,8 +27,11 @@ class Role:
     def get_created_date(self) -> date:
         return self.__created_date
     
+    def get_id(self) -> str:
+        return self.__id.get_value()
+    
     def __str__(self) -> str:
-        return f"Role(value={self.get_value()},created_date={self.get_created_date()})"
+        return f"Role(id={self.get_id()},value={self.get_value()},created_date={self.get_created_date()})"
     
     def __eq__(self, value: object) -> bool:
         if isinstance(value, Role):

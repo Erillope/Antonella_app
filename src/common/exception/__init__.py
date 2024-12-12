@@ -3,11 +3,13 @@ from .invalid_amount_exception import InvalidAmountException
 from .system_exception import SystemException
 from .invalid_field_exception import InvalidFieldException
 from .invalid_order_direction_exception import InvalidOrderDirectionException
+from .missing_operation_exception import MissingOperationException
 
 __all__ = [
     "InvalidIdException",
     "InvalidAmountException",
     "SystemException",
     "InvalidFieldException",
-    "InvalidOrderDirectionException"
+    "InvalidOrderDirectionException",
+    "MissingOperationException"
     ]

@@ -1,7 +1,7 @@
-from src.common.exception import InvalidFieldException
+from src.common.exception import InvalidFieldException, MissingOperationException
 from src.common import FilterExpresion, OrdenDirection, StringValue
 from django.db.models import Q, Model
-from typing import List, Type, Tuple
+from typing import List, Type, Tuple, Optional
 
 class BinaryExpresion:
     DJANGO_OPERATIONS = {'>': 'gt', '<': 'lt', '=': 'exact'}
@@ -13,8 +13,10 @@ class BinaryExpresion:
     def __get_tokens(self) -> Tuple[str, str, str]:
         for opt in self.DJANGO_OPERATIONS:
             if opt in self.__expresion:
-                return self.__expresion.split(opt) + [opt]
-            
+                (self.__expresion.split(opt)[0],self.__expresion.split(opt)[1],opt)
+                return (self.__expresion.split(opt)[0], self.__expresion.split(opt)[1], opt)
+        raise MissingOperationException.missing_operation(list(self.DJANGO_OPERATIONS.keys()))
+                        
     def get_operation(self) -> str:
         return self.DJANGO_OPERATIONS[self.__tokens[2]]
     
@@ -25,7 +27,7 @@ class BinaryExpresion:
         return self.__tokens[1]
 
 class DjangoFilter(FilterExpresion[Model]):
-    fields = []
+    fields : List[str] = []
     
     def __init__(self, table: Type[Model], binary_expresion: str, limit: int, offset: int,
                  order_by: str, direction: OrdenDirection) -> None:
@@ -38,10 +40,10 @@ class DjangoFilter(FilterExpresion[Model]):
         self.__table = table
         
     def and_(self, binary_expresion: str) -> None:
-        self.filter &= self.__generate_q_filter(binary_expresion)
+        self.__filter &= self.__generate_q_filter(binary_expresion)
     
     def or_(self, binary_expresion: str) -> None:
-        self.filter |= self.__generate_q_filter(binary_expresion) 
+        self.__filter |= self.__generate_q_filter(binary_expresion) 
     
     def __generate_q_filter(self, binary_expresion: str) -> Q:
         binary_expresion = binary_expresion.lower().strip()
@@ -63,7 +65,7 @@ class DjangoFilter(FilterExpresion[Model]):
         return models[self.__offset: self.__offset+self.__limit]
     
     @classmethod
-    def construct_filter(cls, table: Type[Model], expresion: str, limit: int, offset: int,
+    def construct_filter(cls, table: Type[Model], expresion: Optional[str], limit: int, offset: int,
                  order_by: str, direction: OrdenDirection) -> "DjangoFilter":
         if expresion is None or expresion.strip() == "":
             expresion = ""

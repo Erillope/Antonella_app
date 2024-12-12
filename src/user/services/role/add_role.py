@@ -13,6 +13,6 @@ class AddRole(IAddRole):
     
     def add(self, dto: AddRoleDto) -> RoleDto:
         self.__role_is_registered.verify_is_already_registered(dto.get_role())
-        role = self.__mapper.to_role(dto.get_role())
+        role = self.__mapper.to_role(dto)
         role = self.__save_role.save(role)
         return self.__mapper.to_dto(role)
