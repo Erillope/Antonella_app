@@ -1,0 +1,3 @@
+from src.services.domain import ServiceException
+
+class ServiceRepositoryException(ServiceException): ...

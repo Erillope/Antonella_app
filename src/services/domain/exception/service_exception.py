@@ -1,0 +1,3 @@
+from src.common import SystemException
+
+class ServiceException(SystemException): ...
