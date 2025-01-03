@@ -1,39 +1,22 @@
-from src.common import OrdenDirection
-from app.filter import DjangoFilter
-from src.user import GetUser, UserAccount, ExistsUser, UserNotFoundException
-from .tables import UserAccountTableData, UserTableMapper, UserRoleTableData
-from typing import List, Optional
+from src.user import GetUser, UserAccount, Role
+from app.common.django_repository import DjangoGetModel, ModelNotFoundException
+from .tables import UserAccountTableData, UserRoleTableData, UserTableMapper, RoleTableMapper
+from typing import List
 
-class DjangoGetUser(GetUser):
-    def __init__(self, exists_user: ExistsUser) -> None:
-        self.__mapper = UserTableMapper()
-        self.__exists_user = exists_user
+class DjangoGetUser(GetUser, DjangoGetModel[UserAccountTableData, UserAccount]):
+    def __init__(self) -> None:
+        super().__init__(UserAccountTableData, UserTableMapper())
+        self.__role_mapper = RoleTableMapper()
+        self.set_allowed_fields(['name', 'status', 'birthdate', 'created_date'])
         
     def get_by_account(self, account: str) -> UserAccount:
-        if self.__exists_user.exists_by_account(account):
-            user_table = UserAccountTableData.objects.get(account=account)
-            roles = UserRoleTableData.get_roles_from_user(user_table)
-            return self.__mapper.to_user(user_table, roles)
-        raise UserNotFoundException.not_found(account)
+        if not self._table.objects.filter(account=account).exists():
+            raise ModelNotFoundException.not_found(account)
+        table = self._table.objects.get(account=account)
+        return self._mapper.to_model(table)
     
-    def get_by_id(self, id: str) -> UserAccount:
-        if self.__exists_user.exists_by_id(id):
-            user_table = UserAccountTableData.objects.get(id=id)
-            roles = UserRoleTableData.get_roles_from_user(user_table)
-            return self.__mapper.to_user(user_table, roles)
-        raise UserNotFoundException.not_found(id)
-    
-    def filter(self, expresion: Optional[str], limit: int, offset: int,
-                 order_by: str, direction: OrdenDirection) -> List[UserAccount]:
-        _filter = DjangoUserFilter.construct_filter(UserAccountTableData, expresion,
-                                                limit, offset, order_by, direction)
-        user_tables = _filter.filter()
-        users : List[UserAccount] = []
-        for table in user_tables:
-            roles = UserRoleTableData.get_roles_from_user(table)
-            user = self.__mapper.to_user(table, roles)
-            users.append(user)
-        return users
-
-class DjangoUserFilter(DjangoFilter):
-    fields = ['name', 'status', 'birthdate', 'created_date']
+    def get_roles(self, id: str) -> List[Role]:
+        user = self.get_by_id(id)
+        table = self._mapper.to_table(user)
+        roles = UserRoleTableData.get_roles_from_user(table)
+        return [self.__role_mapper.to_model(role) for role in roles]

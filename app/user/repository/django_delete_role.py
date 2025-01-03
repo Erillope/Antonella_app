@@ -1,12 +1,13 @@
 from src.user import DeleteRole, Role
-from .tables import RoleTableMapper
+from app.common.django_repository import DjangoDeleteModel
+from .tables import RoleTableData, RoleTableMapper
 
-class DjangoDeleteRole(DeleteRole):
+class DjangoDeleteRole(DeleteRole, DjangoDeleteModel[RoleTableData, Role]):
     def __init__(self) -> None:
-        self.__mapper = RoleTableMapper()
-    
-    def delete(self, role: Role) -> Role:
-        role_table = self.__mapper.to_table(role)
-        role = self.__mapper.to_role(role_table)
+        super().__init__(RoleTableData, RoleTableMapper())
+        
+    def delete_by_name(self, role: str) -> Role:
+        role_table = self._table.objects.get(role=role)
+        role_model = self._mapper.to_model(role_table)
         role_table.delete()
-        return role
+        return role_model

@@ -15,5 +15,5 @@ __all__ = [
     "AddRole",
     "DeleteRole",
     "GetAllRoles",
-    "RenameRole"
+    "RenameRole",
 ]

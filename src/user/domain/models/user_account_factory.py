@@ -15,10 +15,10 @@ class UserAccountFactory:
         ).build()
     
     def load(self, id: str, account: str, name: str, password: str,
-                 status: AccountStatus, birthdate: date, created_date: date, roles: List[Role]) -> UserAccount:
+                 status: AccountStatus, birthdate: date, created_date: date) -> UserAccount:
         return UserAccountBuilder(
             account = account,
             name = name,
             birthdate = birthdate,
             password = password
-        ).id(id).status(status).created_date(created_date).roles(roles).build()
+        ).id(id).status(status).created_date(created_date).build()

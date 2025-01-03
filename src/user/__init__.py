@@ -1,7 +1,5 @@
 from .domain import UserAccount, Role, UserException, AccountStatus
-from .data_providers import (GetUser, ExistsUser, SaveUser, GetRole, SaveRole,
-                             DeleteRole, ExistsRole, UserNotFoundException, UserRepositoryException,
-                             RoleNotFoundException)
+from .data_providers import GetUser, ExistsUser, SaveUser, GetRole, DeleteRole, ExistsRole
 from .services import (ISignIn, ISignUp, IAddRole, IChangeAccountData, IDeleteRole, IDisableUserAccount,
                        IEnableUserAccount, IFilterUser, IGetAllRoles, IGiveRole, IRemoveRole, IRenameRole)
 from .configuration import (RoleServiceConfiguration, RoleRepositoryConfiguration,
@@ -9,23 +7,19 @@ from .configuration import (RoleServiceConfiguration, RoleRepositoryConfiguratio
                             DefaultRoleServiceConfiguration, DefaultUserAccountServiceConfiguration)
 
 __all__ = [
-    "UserException",
     "UserAccount",
-    "AccountStatus",
     "Role",
+    "UserException",
+    "AccountStatus",
     "GetUser",
-    "ExistsRole",
     "ExistsUser",
+    "ExistsRole",
     "SaveUser",
     "GetRole",
-    "SaveRole",
     "DeleteRole",
-    "UserNotFoundException",
-    "UserRepositoryException",
-    "RoleNotFoundException",
-    "IAddRole",
     "ISignIn",
     "ISignUp",
+    "IAddRole",
     "IChangeAccountData",
     "IDeleteRole",
     "IDisableUserAccount",
@@ -35,9 +29,9 @@ __all__ = [
     "IGiveRole",
     "IRemoveRole",
     "IRenameRole",
+    "RoleServiceConfiguration",
     "RoleRepositoryConfiguration",
     "UserRepositoryConfiguration",
-    "RoleServiceConfiguration",
     "UserAccountServiceConfiguration",
     "DefaultRoleServiceConfiguration",
     "DefaultUserAccountServiceConfiguration"

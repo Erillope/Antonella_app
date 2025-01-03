@@ -1,122 +1,55 @@
-from app.user.serializers import (ChangeDataSerializer, EnableSerializer,
-                                  DisableSerializer, GiveRoleSerializer, FilterUserSerializer)
+from app.user.serializers import (ChangeDataSerializer, EnableSerializer, GetListUserSerializer,
+                                  DisableSerializer, GiveRoleSerializer, UserSerializer)
 from app.user.configuration import DependenciesManager
-from app.create_view import ViewCreator, HttpMethod
-from app.controller import Controller
+from app.common.controller import Controller
 from .user_request_mapper import UserRequestMapper
 from .user_serializer_mapper import UserSerializerMapper, GetListUserSerializerMapper
-from typing import List
 
 class AccountDataController(Controller):
+    controller_route = "account"
     services = DependenciesManager.get_user_services()
-    route_prefix = "account"
+    request_mapper = UserRequestMapper()
+    serializer_mapper = UserSerializerMapper()
+    list_serializer_mapper = GetListUserSerializerMapper()
     
-    def __init__(self) -> None:
-        super().__init__()
-        self.__request_mapper = UserRequestMapper()
-        self.__serializer_mapper = UserSerializerMapper()
-        
-    def __change_data_view(self) -> ViewCreator:
-        change_data_service = self.services.construct_change_data_service()
-        executer = lambda request: change_data_service.change_data(
-            self.__request_mapper.to_change_data_dto(request)
-            )
-        return ViewCreator(
-                path = "change_data",
-                executer = executer,
-                name = "Change Data",
-                serializer_class = ChangeDataSerializer,
-                http_method = HttpMethod.PUT,
-                mapper = self.__serializer_mapper
-            )
+    @Controller.put("change_data", "Change Data", ChangeDataSerializer)
+    def change_data(cls, request: ChangeDataSerializer) -> UserSerializer:
+        change_data_service = cls.services.construct_change_data_service()
+        dto = change_data_service.change_data(cls.request_mapper.to_change_data_dto(request))
+        return cls.serializer_mapper.to_serializer(dto)
     
-    def __enable_view(self) -> ViewCreator:
-        enable_account_service = self.services.construct_enable_account_service()
-        executer = lambda request: enable_account_service.enable(
-            self.__request_mapper.to_enable_dto(request)
-            )
-        return ViewCreator(
-                path = "enable",
-                executer = executer,
-                name = "Enable",
-                serializer_class = EnableSerializer,
-                http_method = HttpMethod.PUT,
-                mapper = self.__serializer_mapper
-            )
+    @Controller.put("enable", "Enable", EnableSerializer)
+    def enable(cls, request: EnableSerializer) -> UserSerializer:
+        enable_account_service = cls.services.construct_enable_account_service()
+        dto = enable_account_service.enable(cls.request_mapper.to_enable_dto(request))
+        return cls.serializer_mapper.to_serializer(dto) 
     
-    def __disable_view(self) -> ViewCreator:
-        disable_account_service = self.services.construct_disable_account_service()
-        executer = lambda request: disable_account_service.disable(
-            self.__request_mapper.to_disable_dto(request)
-            )
-        return ViewCreator(
-                path = "disable",
-                executer = executer,
-                name = "Disable",
-                serializer_class = DisableSerializer,
-                http_method = HttpMethod.PUT,
-                mapper = self.__serializer_mapper
-            )
+    @Controller.put("disable", "Disable", DisableSerializer)
+    def disable(cls, request: DisableSerializer) -> UserSerializer:
+        disable_account_service = cls.services.construct_disable_account_service()
+        dto = disable_account_service.disable(cls.request_mapper.to_disable_dto(request))
+        return cls.serializer_mapper.to_serializer(dto)
     
-    def __give_role_view(self) -> ViewCreator:
-        give_role_service = self.services.construct_give_role_service()
-        executer = lambda request: give_role_service.give(self.__request_mapper.to_give_role_dto(request))
-        return ViewCreator(
-            path = "give_role",
-            executer = executer,
-            name = "Give Role",
-            serializer_class = GiveRoleSerializer,
-            http_method = HttpMethod.POST,
-            mapper = self.__serializer_mapper
-        )
+    @Controller.post("give_role", "Give Role", GiveRoleSerializer)
+    def give_role(cls, request: GiveRoleSerializer) -> UserSerializer:
+        give_role_service = cls.services.construct_give_role_service()
+        dto = give_role_service.give(cls.request_mapper.to_give_role_dto(request))
+        return cls.serializer_mapper.to_serializer(dto)
     
-    def __remove_role_view(self) -> ViewCreator:
-        remove_role_service = self.services.construct_remove_role_service()
-        executer = lambda id, roles: remove_role_service.remove(
-            self.__request_mapper.to_remove_role_dto(id, roles)
-            )
-        return ViewCreator(
-            path = "remove_role/<str:id>/<str:roles>",
-            executer = executer,
-            name = "Remove Role",
-            http_method = HttpMethod.DELETE,
-            mapper = self.__serializer_mapper
-        )
+    @Controller.delete("remove_role/<str:id>/<str:roles>", "Remove Role")
+    def remove_role(cls, id: str, roles: str) -> UserSerializer:
+        remove_role_service = cls.services.construct_remove_role_service()
+        dto = remove_role_service.remove(cls.request_mapper.to_remove_role_dto(id, roles))
+        return cls.serializer_mapper.to_serializer(dto)
     
-    def __expresion_filter_user_view(self) -> ViewCreator:
-        filter_user_service = self.services.construct_filter_user_service()
-        executer = lambda expresion, order_by, offset, limit, direction: filter_user_service.filter(
-            self.__request_mapper.to_filter_user_dto(expresion, order_by, offset, limit, direction)
-            )
-        return ViewCreator(
-            path = "filter/<str:expresion>/<str:order_by>/<int:offset>/<int:limit>/<str:direction>",
-            executer = executer,
-            name = "Filter User",
-            http_method = HttpMethod.GET,
-            mapper = GetListUserSerializerMapper()
-        )
+    @Controller.get("filter/<str:order_by>/<int:offset>/<int:limit>/<str:direction>", "Filter User")
+    def filter_user(cls, order_by: str, offset: int, limit: int, direction: str) -> GetListUserSerializer:
+        filter_user_service = cls.services.construct_filter_user_service()
+        dtos = filter_user_service.filter(cls.request_mapper.to_filter_user_dto(None, order_by, offset, limit, direction))
+        return cls.list_serializer_mapper.to_serializer(dtos)
     
-    def __filter_user_view(self) -> ViewCreator:
-        filter_user_service = self.services.construct_filter_user_service()
-        executer = lambda order_by, offset, limit, direction: filter_user_service.filter(
-            self.__request_mapper.to_filter_user_dto(None, order_by, offset, limit, direction)
-            )
-        return ViewCreator(
-            path = "filter/<str:order_by>/<int:offset>/<int:limit>/<str:direction>",
-            executer = executer,
-            name = "Filter User",
-            http_method = HttpMethod.GET,
-            mapper = GetListUserSerializerMapper()
-        )
-        
-    def generate_views(self) -> List[ViewCreator]:
-        views = [
-            self.__change_data_view(),
-            self.__enable_view(),
-            self.__disable_view(),
-            self.__give_role_view(),
-            self.__remove_role_view(),
-            self.__filter_user_view(),
-            self.__expresion_filter_user_view()
-        ]
-        return views
+    @Controller.get("filter/<str:expresion>/<str:order_by>/<int:offset>/<int:limit>/<str:direction>", "Filter User")
+    def expresion_filter_user(cls, expresion: str, order_by: str, offset: int, limit: int, direction: str) -> GetListUserSerializer:
+        filter_user_service = cls.services.construct_filter_user_service()
+        dtos = filter_user_service.filter(cls.request_mapper.to_filter_user_dto(expresion, order_by, offset, limit, direction))
+        return cls.list_serializer_mapper.to_serializer(dtos)

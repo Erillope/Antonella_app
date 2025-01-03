@@ -1,5 +1,5 @@
 from app.user.serializers import GetListUserSerializer
-from app.serializer_mapper import SerializerMapper
+from app.common.serializer_mapper import SerializerMapper
 from src.user.services.dto import UserAccountDto
 from .user_serializer_mapper import UserSerializerMapper
 from typing import List

@@ -1,5 +1,7 @@
-from src.user import RoleRepositoryConfiguration, GetRole, SaveRole, ExistsRole, DeleteRole
-from ..repository import DjangoExistsRole, DjangoGetRole, DjangoSaveRole, DjangoDeleteRole
+from src.common.repository import SaveModel
+from src.user import RoleRepositoryConfiguration, GetRole, DeleteRole, Role, ExistsRole
+from app.common.django_repository import DjangoSaveModel, DjangoExistsModel
+from ..repository import DjangoGetRole, DjangoDeleteRole, RoleTableMapper, RoleTableData, DjangoExistsRole
 
 class DjangoRoleRepositoryConfiguration(RoleRepositoryConfiguration):
     def construct_delete_role(self) -> DeleteRole:
@@ -9,9 +11,7 @@ class DjangoRoleRepositoryConfiguration(RoleRepositoryConfiguration):
         return DjangoExistsRole()
     
     def construct_get_role(self) -> GetRole:
-        return DjangoGetRole(
-            exists_role = self.construct_exists_role()
-        )
+        return DjangoGetRole()
     
-    def construct_save_role(self) -> SaveRole:
-        return DjangoSaveRole()
+    def construct_save_role(self) -> SaveModel[Role]:
+        return DjangoSaveModel[RoleTableData, Role](mapper=RoleTableMapper())

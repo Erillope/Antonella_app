@@ -1,9 +1,4 @@
-from app.router import Router
-from .controllers import AccountDataController, AuthController, RoleController
+from app.common.router import Router
+import app.user.controllers
 
-router = Router()
-router.add(AccountDataController())
-router.add(AuthController())
-router.add(RoleController())
-
-urlpatterns = router.get_routes()
+urlpatterns = Router.get_routes('auth') + Router.get_routes('account') + Router.get_routes('role')

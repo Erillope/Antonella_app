@@ -10,7 +10,6 @@ class UserAccountBuilder:
         self.__id = ID.generate()
         self.__status = AccountStatus.ENABLE
         self.__created_date = date.today()
-        self.__roles : List[Role] = []
         self.__password = password
         self.__account = account
         self.__name = name
@@ -28,10 +27,6 @@ class UserAccountBuilder:
         self.__created_date = created_date
         return self
     
-    def roles(self, roles: List[Role]) -> "UserAccountBuilder":
-        self.__roles = roles
-        return self
-    
     def build(self) -> UserAccount:
         return UserAccount(
             id = self.__id,
@@ -41,5 +36,4 @@ class UserAccountBuilder:
             status = self.__status,
             birthdate = self.__birthdate,
             created_date = self.__created_date,
-            roles = self.__roles
         )

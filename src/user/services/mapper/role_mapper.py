@@ -1,6 +1,6 @@
 from src.common import ID
 from src.user.domain import Role
-from .dto import RoleDto, AddRoleDto
+from ..dto import RoleDto, AddRoleDto
 from datetime import date
 
 class RoleMapper:

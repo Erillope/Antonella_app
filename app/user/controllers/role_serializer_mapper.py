@@ -1,6 +1,6 @@
 from ..serializers import RoleSerializer, GetListRoleSerializer
 from src.user.services.dto import RoleDto
-from app.serializer_mapper import SerializerMapper
+from app.common.serializer_mapper import SerializerMapper
 from typing import List
 
 class RoleSerializerMapper(SerializerMapper):

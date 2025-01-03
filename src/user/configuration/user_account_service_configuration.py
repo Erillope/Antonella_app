@@ -1,11 +1,8 @@
-from ..services import (UserIsRegistered, ISignUp, ISignIn, IEnableUserAccount, IDisableUserAccount,
+from ..services import (ISignUp, ISignIn, IEnableUserAccount, IDisableUserAccount,
                         IChangeAccountData, IGiveRole, IRemoveRole, IFilterUser)
 from abc import ABC, abstractmethod
 
 class UserAccountServiceConfiguration(ABC):
-    @abstractmethod
-    def construct_user_is_registered_service(self) -> UserIsRegistered: ...
-    
     @abstractmethod
     def construct_sign_up_service(self) -> ISignUp: ...
     

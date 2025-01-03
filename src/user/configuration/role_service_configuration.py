@@ -1,10 +1,7 @@
-from ..services import IAddRole, IDeleteRole, IRenameRole, IGetAllRoles, RoleIsRegistered
+from ..services import IAddRole, IDeleteRole, IRenameRole, IGetAllRoles
 from abc import ABC, abstractmethod
 
 class RoleServiceConfiguration(ABC):
-    @abstractmethod
-    def construct_role_is_registered_service(self) -> RoleIsRegistered: ...
-    
     @abstractmethod
     def construct_add_role_service(self) -> IAddRole: ...
     

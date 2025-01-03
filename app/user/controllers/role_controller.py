@@ -1,71 +1,36 @@
-from app.user.serializers import AddRoleSerializer, RenameRoleSerializer
+from app.user.serializers import AddRoleSerializer, RenameRoleSerializer, RoleSerializer, GetListRoleSerializer
 from app.user.configuration import DependenciesManager
-from app.create_view import ViewCreator, HttpMethod
-from app.controller import Controller
+from app.common.controller import Controller
 from .user_request_mapper import UserRequestMapper
 from .role_serializer_mapper import RoleSerializerMapper, GetListRoleSerializerMapper
-from typing import List
 
 class RoleController(Controller):
+    controller_route = "role"
     services = DependenciesManager.get_role_services()
-    route_prefix = "role"
+    request_mapper = UserRequestMapper()
+    serializer_mapper = RoleSerializerMapper()
+    list_serializer_mapper = GetListRoleSerializerMapper()
     
-    def __init__(self) -> None:
-        self.__request_mapper = UserRequestMapper()
-        self.__serializer_mapper = RoleSerializerMapper()
+    @Controller.post("add", "Add Role", AddRoleSerializer)
+    def add(cls, request: AddRoleSerializer) -> RoleSerializer:
+        add_role_service = cls.services.construct_add_role_service()
+        dto = add_role_service.add(cls.request_mapper.to_add_role_dto(request))
+        return cls.serializer_mapper.to_serializer(dto)
     
-    def __add_role_view(self) -> ViewCreator:
-        add_role_service = self.services.construct_add_role_service()
-        executer = lambda request: add_role_service.add(self.__request_mapper.to_add_role_dto(request))
-        return ViewCreator(
-                path = "add",
-                serializer_class = AddRoleSerializer,
-                executer = executer,
-                name = "Add Role",
-                http_method = HttpMethod.POST,
-                mapper = self.__serializer_mapper
-            )
+    @Controller.delete("delete/<str:role>", "Delete Role")
+    def delete(cls, role: str) -> RoleSerializer:
+        delete_role_service = cls.services.construct_delete_role_service()
+        dto = delete_role_service.delete(cls.request_mapper.to_delete_role_dto(role))
+        return cls.serializer_mapper.to_serializer(dto)
     
-    def __delete_role_view(self) -> ViewCreator:
-        delete_role_service = self.services.construct_delete_role_service()
-        executer = lambda role: delete_role_service.delete(self.__request_mapper.to_delete_role_dto(role))
-        return ViewCreator(
-            path = "delete/<str:role>",
-            executer = executer,
-            name = "Delete Role",
-            http_method = HttpMethod.DELETE,
-            mapper = self.__serializer_mapper
-        )
+    @Controller.put("rename", "Rename Role", RenameRoleSerializer)
+    def rename(cls, request: RenameRoleSerializer) -> RoleSerializer:
+        rename_role_service = cls.services.construct_rename_role_service()
+        dto = rename_role_service.rename(cls.request_mapper.to_rename_role_dto(request))
+        return cls.serializer_mapper.to_serializer(dto)
     
-    def __rename_role_view(self) -> ViewCreator:
-        rename_role_service = self.services.construct_rename_role_service()
-        executer = lambda request: rename_role_service.rename(
-            self.__request_mapper.to_rename_role_dto(request)
-            ) 
-        return ViewCreator(
-            path = "rename",
-            serializer_class = RenameRoleSerializer,
-            executer = executer,
-            name = "Rename Role",
-            http_method = HttpMethod.PUT,
-            mapper = self.__serializer_mapper
-        )
-        
-    def __get_all_roles_view(self) -> ViewCreator:
-        get_all_roles_service = self.services.construct_get_all_roles_service()
-        executer = lambda : get_all_roles_service.get_all()
-        return ViewCreator(
-            path = "",
-            executer = executer,
-            name = "Add Role",
-            http_method = HttpMethod.GET,
-            mapper = GetListRoleSerializerMapper()
-        )
-        
-    def generate_views(self) -> List[ViewCreator]:
-        return [
-            self.__add_role_view(),
-            self.__delete_role_view(),
-            self.__get_all_roles_view(),
-            self.__rename_role_view()
-        ]
+    @Controller.get("", "Get All Roles")
+    def get_all(cls) -> GetListRoleSerializer:
+        get_all_roles_service = cls.services.construct_get_all_roles_service()
+        dtos = get_all_roles_service.get_all()
+        return cls.list_serializer_mapper.to_serializer(dtos)

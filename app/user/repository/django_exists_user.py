@@ -1,9 +1,10 @@
 from src.user import ExistsUser
+from app.common.django_repository import DjangoExistsModel
 from .tables import UserAccountTableData
 
-class DjangoExistsUser(ExistsUser):
+class DjangoExistsUser(ExistsUser, DjangoExistsModel[UserAccountTableData]):
+    def __init__(self) -> None:
+        super().__init__(table=UserAccountTableData)
+        
     def exists_by_account(self, account: str) -> bool:
-        return UserAccountTableData.objects.filter(account=account).exists()
-    
-    def exists_by_id(self, id: str) -> bool:
-        return UserAccountTableData.objects.filter(id=id).exists()
+        return self._table.objects.filter(account=account).exists()

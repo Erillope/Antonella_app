@@ -6,9 +6,7 @@ class DjangoUserRepositoryConfiguration(UserRepositoryConfiguration):
         return DjangoExistsUser()
     
     def construct_get_user(self) -> GetUser:
-        return DjangoGetUser(
-            exists_user = self.construct_exists_user()
-        )
+        return DjangoGetUser()
     
     def construct_save_user(self) -> SaveUser:
-        return DjangoSaveUser()
+        return DjangoSaveUser(get_user=self.construct_get_user())

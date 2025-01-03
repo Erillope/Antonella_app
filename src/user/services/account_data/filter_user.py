@@ -1,7 +1,7 @@
 from src.user.data_providers import GetUser
 from .abstract_filter_user import IFilterUser
 from ..dto import FilterUserDto, UserAccountDto
-from ..user_account_mapper import UserAccountMapper
+from ..mapper import UserAccountMapper
 from typing import List
 
 class FilterUser(IFilterUser):
@@ -17,5 +17,5 @@ class FilterUser(IFilterUser):
             order_by = dto.get_order_by(),
             direction = dto.get_direction()
         )
-        dtos = [self.__mapper.to_dto(user) for user in users]
+        dtos = [self.__mapper.to_dto(user, self.__get_user.get_roles(user.get_id())) for user in users]
         return dtos

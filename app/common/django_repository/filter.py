@@ -1,6 +1,6 @@
 from src.common.exception import InvalidFieldException, MissingOperationException
 from src.common import FilterExpresion, OrdenDirection, StringValue
-from django.db.models import Q, Model
+from django.db.models import Q, Model #type: ignore
 from typing import List, Type, Tuple, Optional
 
 class BinaryExpresion:
@@ -26,11 +26,10 @@ class BinaryExpresion:
     def get_value(self) -> str:
         return self.__tokens[1]
 
-class DjangoFilter(FilterExpresion[Model]):
-    fields : List[str] = []
-    
+class DjangoFilter(FilterExpresion[Model]):    
     def __init__(self, table: Type[Model], binary_expresion: str, limit: int, offset: int,
-                 order_by: str, direction: OrdenDirection) -> None:
+                 order_by: str, direction: OrdenDirection, fields: List[str]) -> None:
+        self.__fields = fields
         self.__filter = self.__generate_q_filter(binary_expresion)
         self.__limit = limit
         self.__offset = offset
@@ -55,8 +54,8 @@ class DjangoFilter(FilterExpresion[Model]):
         return Q(**{lookup: expresion.get_value()})
     
     def __verify_field(self, field: str) -> None:
-        if field not in self.fields:
-            raise InvalidFieldException.invalid_field(field, self.fields)
+        if field not in self.__fields:
+            raise InvalidFieldException.invalid_field(field, self.__fields)
 
     def filter(self) -> List[Model]:
         models = self.__table.objects.filter(self.__filter)
@@ -66,12 +65,12 @@ class DjangoFilter(FilterExpresion[Model]):
     
     @classmethod
     def construct_filter(cls, table: Type[Model], expresion: Optional[str], limit: int, offset: int,
-                 order_by: str, direction: OrdenDirection) -> "DjangoFilter":
+                 order_by: str, direction: OrdenDirection, fields: List[str]) -> "DjangoFilter":
         if expresion is None or expresion.strip() == "":
             expresion = ""
         expresion = expresion.lower().strip().replace(' ', ',')
         exps = expresion.split(',')
-        _filter = cls(table, exps[0], limit, offset, order_by, direction)
+        _filter = cls(table, exps[0], limit, offset, order_by, direction, fields)
         for i in range(1, len(exps)-2, 2):
             if exps[i] == "and":
                 _filter.and_(exps[i+1])

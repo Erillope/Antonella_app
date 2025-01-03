@@ -9,7 +9,7 @@ class DependenciesManager:
     def get_user_services(cls) -> UserAccountServiceConfiguration:
         return DefaultUserAccountServiceConfiguration(
             user_repository_configuration = DjangoUserRepositoryConfiguration(),
-            role_service_configuration = cls.get_role_services()
+            role_repository_configuration = DjangoRoleRepositoryConfiguration()
         )
     
     @staticmethod
